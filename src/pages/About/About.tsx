@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { GetAbout } from "../../services/about";
 import { Link } from 'react-router-dom';
 import { Bio, WorkExperience } from '../../types';
-import Typical from 'react-typical';
+import { TypeAnimation } from 'react-type-animation';
+
 import {  
   CodeOutlined,  
   TrophyOutlined,
@@ -83,11 +84,6 @@ const About: React.FC = () => {
     );
   }
 
- const titles = [
-    "Software Engineer",
-    "Tech Innovator",
-    "Problem Solver"
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-blue-900 text-white">
@@ -105,13 +101,11 @@ const About: React.FC = () => {
     Hello, I'm <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">{bio.name}</span>
   </h1>
 
-<Typical
-  steps={['Developer', 1500, 'Designer', 1500, 'Creator', 1500]}
-  loop={Infinity}
-  wrapper="span"
+<TypeAnimation
+  sequence={['Developer', 1500, 'Designer', 1500, 'Creator', 1500]}
+  speed={50}
+  repeat={Infinity}
 />
-
-
     </div>
 
           </div>
