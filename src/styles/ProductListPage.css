@@ -1,0 +1,202 @@
+.product-list-container {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.product-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header-content h1 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #262626;
+}
+
+.header-content p {
+  margin: 0;
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.statistics-row {
+  margin-bottom: 24px;
+}
+
+.filters-card {
+  margin-bottom: 24px;
+}
+
+.filters-container {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  margin-bottom: 4px;
+  font-weight: 500;
+  color: #262626;
+}
+
+/* Product cell styles */
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.product-thumbnail {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #d9d9d9;
+}
+
+.product-thumbnail-placeholder {
+  width: 40px;
+  height: 40px;
+  background: #f5f5f5;
+  border: 1px dashed #d9d9d9;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #8c8c8c;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-name {
+  font-weight: 500;
+  color: #262626;
+  line-height: 1.4;
+}
+
+.product-category {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.product-price {
+  font-weight: 600;
+  color: #52c41a;
+  font-size: 14px;
+}
+
+/* Error state */
+.error-card {
+  text-align: center;
+  margin: 40px auto;
+  max-width: 500px;
+}
+
+.error-state h3 {
+  color: #ff4d4f;
+  margin-bottom: 8px;
+}
+
+.error-state p {
+  color: #8c8c8c;
+  margin-bottom: 16px;
+}
+
+/* Table styles */
+.ant-table-wrapper {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ant-table-thead > tr > th {
+  background: #fafafa;
+  font-weight: 600;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .product-list-container {
+    padding: 16px;
+  }
+
+  .product-list-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .filters-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group {
+    width: 100%;
+  }
+
+  .filter-group .ant-input,
+  .filter-group .ant-select {
+    width: 100% !important;
+  }
+
+  .statistics-row .ant-col {
+    margin-bottom: 16px;
+  }
+
+  .product-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .product-thumbnail,
+  .product-thumbnail-placeholder {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Loading state enhancement */
+.ant-spin-container {
+  min-height: 200px;
+}
+
+/* Custom table row hover */
+.ant-table-tbody > tr:hover > td {
+  background: #fafafa !important;
+}
+
+/* Action buttons */
+.ant-btn-link {
+  padding: 4px 8px;
+  height: auto;
+}
+
+/* Empty state */
+.ant-empty {
+  padding: 40px 0;
+}
+
+.ant-empty-description {
+  color: #8c8c8c;
+}
