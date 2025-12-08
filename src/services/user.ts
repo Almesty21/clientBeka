@@ -1,6 +1,6 @@
 import { axiosInstance } from './apiConfig';
 import {  ApiResponse } from "../types/error";
-import  Aimport {ILoginInput, UserPayload} from '../types/auth';
+import {ILoginInput, UserPayload} from '../types/auth';
 
 // Register users
 export const createUser = async  (payload: UserPayload): Promise<ApiResponse<UserPayload>> => {
