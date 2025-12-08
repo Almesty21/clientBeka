@@ -1,4 +1,4 @@
-import { postRequest } from "./api";
+import { axiosInstance } from "./apiConfig";
 import { ILoginInput, ILoginResponse } from "../types/auth";
 
 
