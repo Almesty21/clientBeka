@@ -1,4 +1,5 @@
 import { axiosInstance } from './apiConfig';
+import {  ApiResponse } from "../types/error";
 import {  Aimport {ILoginInput, UserPayload} from '../types/auth';
 
 // Register users
