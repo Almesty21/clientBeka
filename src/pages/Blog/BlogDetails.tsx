@@ -14,7 +14,7 @@ const { Content } = Layout;
 interface CreateCommentPayload {
   content: string;
   blogId: string;
-  authorName: string;
+  author: string;
   parentId?: string;
 }
 
@@ -24,7 +24,7 @@ const BlogDetail = () => {
   const [commentContent, setCommentContent] = useState('');
   const [commentAuthor, setCommentAuthor] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [replyingTo, setReplyingTo] = useState<string>();
   const [replyContents, setReplyContents] = useState<{ [key: string]: string }>({});
 
   // Validate blog ID before using hooks
@@ -155,7 +155,7 @@ const BlogDetail = () => {
       const replyPayload: CreateCommentPayload = {
         content: replyContent,
         blogId: id!,
-        authorName: commentAuthor || 'Anonymous',
+        author: commentAuthor || 'Anonymous',
         parentId: commentId,
       };
       
