@@ -1,4 +1,4 @@
-import { useEffect,createContext, useContext, ReactNode } from 'react';
+import React, { useEffect,createContext, useContext, ReactNode, useState } from 'react';
 import { Bio, WorkExperience } from '../types';
 import { GetAbout } from '../services/about';
 
@@ -61,10 +61,10 @@ interface AboutProviderProps {
 }
 
 export const AboutProvider: React.FC<AboutProviderProps> = ({ children }) => {
-  const [bio, setBio] = React.useState<Bio>(fallbackBio);
-  const [workExperiences, setWorkExperiences] = React.useState<WorkExperience[]>(fallbackWorkExperiences);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const [bio, setBio] = useState<Bio>(fallbackBio);
+  const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>(fallbackWorkExperiences);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const refetchAbout = async () => {
     setLoading(true);
