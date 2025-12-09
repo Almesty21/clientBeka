@@ -15,14 +15,9 @@ import {
 } from '@ant-design/icons';
 
 export const ContactForm: React.FC = () => {
-  const {
-    handleSubmit,
-    onSubmit,
-    loading,
-    error,
-    success,
-    ...formMethods
-  } = useContactReg();
+  const formMethods = useContactReg();
+  const { handleSubmit, onSubmit, loading, error, success } = formMethods;
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-blue-900 py-8 px-4 sm:px-6 lg:px-8">
