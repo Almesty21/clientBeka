@@ -3,6 +3,16 @@ export interface ILoginInput {
   password: string;
 }
 
+export interface ILoginResponse {
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+
+
 export interface IToken {
   access_token: string;
   refresh_token: string;
