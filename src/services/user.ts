@@ -24,36 +24,40 @@ export const GetUsers = async  (payload:ILoginInput):Promise<ApiResponse<ILoginI
     return error.message;
   }
 };
-
 // Get current user by ID
-export const GetUserById = async (id): Promise<ApiResponse<UserPayload>>=> {
+export const GetUserById = async (id: string): Promise<ApiResponse<UserPayload>>=> {
   try {
-    const response = await axiosInstance.get(`/User/${id}`); // Changed to GET request
+    const response = await axiosInstance.get(`/User/${id}`);
     return response.data;
   } catch (error:any) {
-    console.error(`Error fetching user with ID ${id}:`, error); // More robust error handling
-    return error.message;
+    console.error(`Error fetching user with ID ${id}:`, error);
+    throw new Error(error.response?.data?.message || 'Failed to get user');
   }
 };
 
 // Update user
-export const UpdateUser = async (id, payload:UserPayload) : Promise<ApiResponse<UserPayload>>=>{ // Added payload parameter
+export const UpdateUser = async (
+  id: string, 
+  payload: UserPayload
+): Promise<ApiResponse<UserPayload>> => {
   try {
-    const response = await axiosInstance.put(`/User/${id}`, payload); // Added payload
+    const response = await axiosInstance.put(`/User/${id}`, payload);
     return response.data;
   } catch (error:any) {
-    console.error(`Error updating user with ID ${id}:`, error); // More robust error handling
-    return error.message;
+    console.error(`Error updating user with ID ${id}:`, error);
+    throw new Error(error.response?.data?.message || 'Failed to update user');
   }
 };
 
 // Delete a user
-export const DeleteUser = async (id) : Promise<ApiResponse<UserPayload>>=> {
+export const DeleteUser = async (id: string): Promise<ApiResponse<UserPayload>> => {
   try {
     const response = await axiosInstance.delete(`/User/${id}`);
     return response.data;
   } catch (error:any) {
-    console.error(`Error deleting user with ID ${id}:`, error); // More robust error handling
-    return error.message;
+    console.error(`Error deleting user with ID ${id}:`, error);
+    throw new Error(error.response?.data?.message || 'Failed to delete user');
   }
+};
+
 };
