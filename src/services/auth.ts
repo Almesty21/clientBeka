@@ -1,7 +1,8 @@
 import { axiosInstance } from "./apiConfig";
-import { ILoginInput, UserPayload } from "../types/auth";
+import { ILoginInput, ILoginResponse } from "../types/auth";
 
-export const loginApi = async (data: ILoginInput) => {
-  const response = await axiosInstance.post<UserPayload>("/users/login", data);
+
+export const loginApi = async (data: ILoginInput): Promise<ILoginResponse> => {
+  const response = await axiosInstance.post<ILoginResponse>("/users/login", data);
   return response.data;
 };
