@@ -60,4 +60,3 @@ export const DeleteUser = async (id: string): Promise<ApiResponse<UserPayload>> 
   }
 };
 
-};
