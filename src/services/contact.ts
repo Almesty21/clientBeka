@@ -1,6 +1,6 @@
 // src/services/contact.ts
 import { axiosInstance } from "./apiConfig";
-import { ContactPayload, ApiResponse, ContactResponse } from "../models/contact";
+import { ContactPayload, ApiResponse, ContactResponse } from "../types/contact";
 
 export const CreateContact = async (
   payload: ContactPayload
