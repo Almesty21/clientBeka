@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ILoginInput } from "../types/auth";
-import { LoginUser } from "../services/user";  // <-- FIXED
+import { loginUser } from "../services/user";  // <-- updated
 import { useNotificationContext } from "../contexts/NotificationContext";
 import { useNavigate } from "react-router-dom";
 import { RouteName } from "../constants/route";
@@ -16,7 +16,7 @@ export default function useLogin() {
     setLoading(true);
 
     try {
-      const response = await LoginUser(input);
+      const response = await loginUser(input);  // <-- updated
 
       if (response.data?.token) {
         localStorage.setItem("token", response.data.token.access_token);
