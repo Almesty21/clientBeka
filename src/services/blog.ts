@@ -8,7 +8,7 @@ import {
   PaginatedResponse,
   Comment,
   CreateCommentPayload
-} from "../models/blog";
+} from "../types/blog";
 
 export const blogService = {
   // Create a new blog
