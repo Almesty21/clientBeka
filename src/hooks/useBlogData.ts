@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getBlogById } from '../services/blog'; // <-- check name
+import { blogService } from '../services/blog';
 import { Blog } from '../types/blog';
 import { CommentFormData } from '../types/CommentForm';
 
@@ -19,7 +19,9 @@ export const useBlogData = (id: string | undefined): UseBlogDataReturn => {
 
       try {
         setLoading(true);
-        const response = await getBlogById(id); // <-- updated
+
+        const response = await blogService.getBlogById(id);
+        
         if (response.success) {
           setBlog(response.data);
         } else {
