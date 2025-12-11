@@ -1,60 +1,44 @@
-import { useEffect, useState } from "react";
-import { useNotificationContext } from "../contexts/NotificationContext";
-import { useParams } from "react-router-dom";
+// src/hooks/useProduct.ts
+import { useState, useEffect } from "react";
 import { ProductPayload } from "../types";
-import { GetProducts } from "../services/products";
-
-interface ProductResponse {
-  loading: boolean;
-  data?: ProductPayload[];
-}
+import { getProducts } from "../services/productService";
 
 export default function useProduct() {
-  const id: string = useParams().id!;
-  const { showError } = useNotificationContext();
-  const [openBan, setOpenBan] = useState<boolean>(false);
-  const [openActivate, setOpenActivate] = useState<boolean>(false);
-  const [data, setData] = useState<ProductResponse>({
-    loading: true,
-  });
+  const [data, setData] = useState<ProductPayload[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  const [openActivate, setOpenActivate] = useState(false);
+  const [openBan, setOpenBan] = useState(false);
 
   const fetchData = async () => {
-    setData({ loading: true });
     try {
-      const response = await GetProducts();
-      if (response.success) {
-        setData({ 
-          loading: false, 
-          data: response.data 
-        });
-      } else {
-        showError(response.message || 'Failed to fetch products');
-        setData({ loading: false });
-      }
-    } catch (error: any) {
-      showError(error?.message || 'Error fetching products');
-      setData({ loading: false });
+      setLoading(true);
+      const res = await getProducts();
+      setData(res);
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || "Failed to fetch");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleOpenBan = () => setOpenBan(true);
-  const handleCloseBan = () => setOpenBan(false);
-  const handleOpenActivate = () => setOpenActivate(true);
-  const handleCloseActivate = () => setOpenActivate(false);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return {
     data,
-    handleCloseActivate,
-    handleCloseBan,
-    handleOpenActivate,
-    handleOpenBan,
+    loading,
+    error,
+    fetchData,
+
     openActivate,
     openBan,
-    fetchData,
+    handleOpenActivate: () => setOpenActivate(true),
+    handleCloseActivate: () => setOpenActivate(false),
+    handleOpenBan: () => setOpenBan(true),
+    handleCloseBan: () => setOpenBan(false),
   };
 }
