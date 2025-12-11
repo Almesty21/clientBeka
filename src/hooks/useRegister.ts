@@ -17,16 +17,22 @@ export default function useRegister() {
   });
 
   const onSubmit = async (input: UserPayload) => {
-    setLoading(true);
-    const { data, error } = await createUser(input);
-    if (data) {
-      showSuccess("Successfully logged in");
+  setLoading(true);
+  try {
+    const response = await createUser(input); // response is ApiResponse<UserPayload>
+    if (response.data) {
+      showSuccess("Successfully registered");
       navigate(RouteName.DASHBOARD, { replace: true });
     } else {
-      showError(error!.message);
+      showError(response.message || "Something went wrong");
     }
+  } catch (err: any) {
+    showError(err.message || "Unexpected error occurred");
+  } finally {
     setLoading(false);
-  };
+  }
+};
+
 
   return { handleSubmit, onSubmit, control, loading };
 }
