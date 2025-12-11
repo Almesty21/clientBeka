@@ -1,11 +1,9 @@
 import React from 'react';
-import { Layout, Menu, Typography, Button } from 'antd';
+import { Layout, Button } from 'antd';
 import { AppstoreOutlined, AudioOutlined } from '@ant-design/icons';
-import BlogDetails from './BlogDetails';
-
+import ArticleDetails from './ArticleDetails';
 
 const { Header, Content, Sider } = Layout;
-const { Title } = Typography;
 
 const BlogPage = () => {
   return (
@@ -20,10 +18,11 @@ const BlogPage = () => {
             This page shares a summary of our Wednesday's podcast, featuring the brightest
             business minds in Ethiopia. Learn what it takes to build a great company from
             the most successful entrepreneurs who are changing the face of Ethiopia!
-          </p><br/><br/><br/><br/>
-          <ArticleDetails/>
+          </p>
+          <br /><br /><br /><br />
+          <ArticleDetails />
         </Content>
-        <Sider width={200} height={100} className="bg-black p-4">
+        <Sider width={200} style={{ minHeight: '100vh' }} className="bg-black p-4">
           <div className="text-white mb-4">
             <div className="font-bold mb-2">Categories</div>
             <Button
@@ -41,7 +40,7 @@ const BlogPage = () => {
               Podcast
             </Button>
           </div>
-          <hr/>
+          <hr />
           <div className="p-4 text-white">
             <div className="font-bold">Tags</div>
             <div className="flex space-x-2 mt-2">
@@ -55,4 +54,4 @@ const BlogPage = () => {
   );
 };
 
-export default BlogPa
+export default BlogPage;
