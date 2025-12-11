@@ -215,9 +215,9 @@ const BlogList = () => {
               <div style={{ marginTop: 12 }}>
                 <Space wrap size={[4, 4]}>
                   {blog.tags.slice(0, 2).map((tag, tagIndex) => (
-                    <Tag key={`tag-${blog.id}-${tag}-${tagIndex}`} color="default" size="small">
+                   <Tag key={`tag-${blog.id}-${tag}-${tagIndex}`} color="default" style={{ fontSize: '0.75rem', padding: '0 4px' }}>
                       #{tag}
-                    </Tag>
+                   </Tag>
                   ))}
                   {blog.tags.length > 2 && (
                     <Tag key={`more-tags-${blog.id}`} size="small">
@@ -232,7 +232,7 @@ const BlogList = () => {
           {/* Actions */}
           <div style={{ marginTop: 16, textAlign: 'center' }}>
             <Link 
-              to={`/blog/${blog._id}`} 
+              to={`/blog/${blog.id}`} 
               onClick={(e) => e.stopPropagation()}
             >
               <Button type="primary" size="middle" block>
