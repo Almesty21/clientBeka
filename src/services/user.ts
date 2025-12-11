@@ -14,6 +14,22 @@ export const createUser = async  (payload: UserPayload): Promise<ApiResponse<Use
   }
 };
 
+export const LoginUser = async (
+  payload: ILoginInput
+): Promise<ApiResponse<UserPayload>> => {
+  try {
+    const response = await axiosInstance.post<ApiResponse<UserPayload>>(
+      `/User/login`,
+      payload
+    );
+    return response.data;
+  } catch (error: any) {
+    console.error("Login error:", error);
+    throw new Error(error.response?.data?.message || "Failed to login");
+  }
+};
+
+
 // Get users
 export const GetUsers = async  (payload:ILoginInput):Promise<ApiResponse<ILoginInput>> => {
   try {
