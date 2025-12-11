@@ -7,6 +7,30 @@ export interface Author {
   bio?: string;
   createdAt?: string;
 }
+export interface Comment {
+  id: string;
+  blogId: string;
+  userId: string;
+  username: string;
+  avatar?: string;
+  content: string;
+  likes: number;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface CreateCommentPayload {
+  blogId: string;
+  userId: string;
+  content: string;
+  author: string;
+  parentId?: string | null;
+}
+export interface LikeCommentResponse {
+  id: string;
+  likes: number;
+}
+
 
 export interface Blog {
   id: string;
@@ -56,13 +80,6 @@ export interface CreateBlogPayload {
 
 export interface UpdateBlogPayload extends Partial<CreateBlogPayload> {
   id: string;
-}
-
-export interface CreateCommentPayload {
-  content: string;
-  blogId: string;
-  author: string;
-  parentId?: string | null;
 }
 
 export interface ApiResponse<T> {
