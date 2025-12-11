@@ -1,51 +1,72 @@
 import { axiosInstance } from "./apiConfig";
 
-// Create About
-export const CreateAbout = async (payload) => {
+// Define About type (optional - adjust to your real fields)
+export interface AboutPayload {
+  title: string;
+  description: string;
+  image?: string;
+}
+
+// ------------------- CREATE ABOUT -------------------
+export const CreateAbout = async (
+  payload: AboutPayload
+): Promise<any> => {
   try {
     const response = await axiosInstance.post(`/about/`, payload);
     return response.data;
-  } catch (error) {
-    return error.message; // You may want better error handling (e.g., error.response.data)
+  } catch (error: unknown) {
+    if (error instanceof Error) return error.message;
+    return "Unknown error occurred";
   }
 };
 
-// Get all About entries
-export const GetAbout = async () => {
+// ------------------- GET ALL ABOUT -------------------
+export const GetAbout = async (): Promise<any> => {
   try {
     const response = await axiosInstance.get(`/about/`);
     return response.data;
-  } catch (error) {
-    return error.message;
+  } catch (error: unknown) {
+    if (error instanceof Error) return error.message;
+    return "Unknown error occurred";
   }
 };
 
-// Get About by ID
-export const GetAboutById = async (id) => {
+// ------------------- GET ABOUT BY ID -------------------
+export const GetAboutById = async (
+  id: string
+): Promise<any> => {
   try {
     const response = await axiosInstance.get(`/about/${id}`);
     return response.data;
-  } catch (error) {
-    return error.message;
+  } catch (error: unknown) {
+    if (error instanceof Error) return error.message;
+    return "Unknown error occurred";
   }
 };
 
-// Update About
-export const UpdateAbout = async (id, payload) => {
+// ------------------- UPDATE ABOUT -------------------
+export const UpdateAbout = async (
+  id: string,
+  payload: AboutPayload
+): Promise<any> => {
   try {
     const response = await axiosInstance.put(`/about/${id}`, payload);
     return response.data;
-  } catch (error) {
-    return error.message;
+  } catch (error: unknown) {
+    if (error instanceof Error) return error.message;
+    return "Unknown error occurred";
   }
 };
 
-// Delete About
-export const DeleteAbout = async (id) => {
+// ------------------- DELETE ABOUT -------------------
+export const DeleteAbout = async (
+  id: string
+): Promise<any> => {
   try {
     const response = await axiosInstance.delete(`/about/${id}`);
     return response.data;
-  } catch (error) {
-    return error.message;
+  } catch (error: unknown) {
+    if (error instanceof Error) return error.message;
+    return "Unknown error occurred";
   }
 };
