@@ -9,6 +9,16 @@ import { ShareAltOutlined, SmileOutlined, MessageOutlined, EyeOutlined, UserOutl
 const { Title, Paragraph } = Typography;
 const { TextArea } = Input;
 const { Content } = Layout;
+interface Comment {
+  id: string;
+  content: string;
+  author: any;
+  createdAt: string;
+  likes?: number;
+  replies?: Comment[];
+}
+
+const comments: Comment[] = ...;
 
 // Define the comment payload interface locally
 interface CreateCommentPayload {
@@ -24,8 +34,9 @@ const BlogDetail = () => {
   const [commentContent, setCommentContent] = useState('');
   const [commentAuthor, setCommentAuthor] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [replyingTo, setReplyingTo] = useState<string>();
-  const [replyContents, setReplyContents] = useState<{ [key: string]: string }>({});
+  const [replyingTo, setReplyingTo] = useState<string | undefined>(undefined);
+  const [replyContents, setReplyContents] = useState<{ [key: string]: string | undefined }>({});
+
 
   // Validate blog ID before using hooks
   const isValidBlogId = id && id !== 'undefined' && id !== 'null';
@@ -161,7 +172,7 @@ const BlogDetail = () => {
       
       await addComment(replyPayload);
       setReplyContents(prev => ({ ...prev, [commentId]: '' }));
-      setReplyingTo(null);
+      setReplyingTo(undefined);
       message.success('Reply added successfully!');
     } catch (error) {
       console.error('Error adding reply:', error);
@@ -572,6 +583,7 @@ const BlogDetail = () => {
                                     placeholder="Write a reply..."
                                     style={{ marginBottom: 8 }}
                                   />
+                                  
                                   <Space>
                                     <Button 
                                       type="primary" 
@@ -594,7 +606,7 @@ const BlogDetail = () => {
                               {/* Nested Replies */}
                               {comment.replies && comment.replies.length > 0 && (
                                 <div style={{ marginTop: 16, paddingLeft: 16, borderLeft: '2px solid #f0f0f0' }}>
-                                  {comment.replies.map(reply => (
+                                  {comment.replies.map((reply:Comment) => (
                                     <div key={reply.id} style={{ marginBottom: 12, padding: '8px 0' }}>
                                       <div style={{ display: 'flex', alignItems: 'flex-start' }}>
                                         <AuthorAvatar author={reply.author} size="small" />
