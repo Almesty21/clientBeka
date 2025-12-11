@@ -47,6 +47,7 @@ export interface ProductPayload {
   link?: string;
   downloadLink?: string;
   createdAt?:Date;
+  category?: string; // <-- add this line
 }
 
 export interface ApiResponse<T> {
