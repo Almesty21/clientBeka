@@ -18,8 +18,6 @@ interface Comment {
   replies?: Comment[];
 }
 
-const comments: Comment[] = ...;
-
 // Define the comment payload interface locally
 interface CreateCommentPayload {
   content: string;
