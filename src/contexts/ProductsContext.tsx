@@ -3,11 +3,20 @@ import { ProductPayload } from '../types';
 import  useProduct  from '../hooks/useProduct';
 
 interface ProductsContextType {
-  products: ProductPayload[];
+  data: ProductPayload[];
   loading: boolean;
   error: string | null;
-  refetch: () => void;
+
+  fetchData: () => Promise<void>;
+
+  openActivate: boolean;
+  openBan: boolean;
+  handleOpenActivate: () => void;
+  handleCloseActivate: () => void;
+  handleOpenBan: () => void;
+  handleCloseBan: () => void;
 }
+
 
 const ProductsContext = createContext<ProductsContextType | undefined>(undefined);
 
