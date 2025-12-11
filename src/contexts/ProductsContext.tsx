@@ -24,35 +24,10 @@ interface ProductsProviderProps {
 }
 
 export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) => {
-  const { 
-    data, 
-    loading, 
-    error, 
-    fetchData, 
-    openActivate, 
-    openBan, 
-    handleOpenActivate, 
-    handleCloseActivate, 
-    handleOpenBan, 
-    handleCloseBan 
-  } = useProduct();
-
-  // Ensure the value matches ProductsContextType
-  const contextValue: ProductsContextType = {
-    data,
-    loading,
-    error,
-    fetchData,
-    openActivate,
-    openBan,
-    handleOpenActivate,
-    handleCloseActivate,
-    handleOpenBan,
-    handleCloseBan,
-  };
+  const ctx = useProduct();
 
   return (
-    <ProductsContext.Provider value={contextValue}>
+    <ProductsContext.Provider value={ctx}>
       {children}
     </ProductsContext.Provider>
   );
