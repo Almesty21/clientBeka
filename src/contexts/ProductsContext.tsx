@@ -1,6 +1,6 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { ProductPayload } from '../types';
-import  useProduct  from '../hooks/useProduct';
+import useProduct from '../hooks/useProduct';
 
 interface ProductsContextType {
   data: ProductPayload[];
@@ -17,7 +17,6 @@ interface ProductsContextType {
   handleCloseBan: () => void;
 }
 
-
 const ProductsContext = createContext<ProductsContextType | undefined>(undefined);
 
 interface ProductsProviderProps {
@@ -25,9 +24,35 @@ interface ProductsProviderProps {
 }
 
 export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) => {
-  const productsData = useProduct();
+  const { 
+    data, 
+    loading, 
+    error, 
+    fetchData, 
+    openActivate, 
+    openBan, 
+    handleOpenActivate, 
+    handleCloseActivate, 
+    handleOpenBan, 
+    handleCloseBan 
+  } = useProduct();
+
+  // Ensure the value matches ProductsContextType
+  const contextValue: ProductsContextType = {
+    data,
+    loading,
+    error,
+    fetchData,
+    openActivate,
+    openBan,
+    handleOpenActivate,
+    handleCloseActivate,
+    handleOpenBan,
+    handleCloseBan,
+  };
+
   return (
-    <ProductsContext.Provider value={productsData}>
+    <ProductsContext.Provider value={contextValue}>
       {children}
     </ProductsContext.Provider>
   );
@@ -35,7 +60,7 @@ export const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) 
 
 export const useProductsContext = (): ProductsContextType => {
   const context = useContext(ProductsContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useProductsContext must be used within a ProductsProvider');
   }
   return context;
