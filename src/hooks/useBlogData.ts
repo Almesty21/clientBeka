@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { GetBlogById } from '../services/blog';
+import { getBlogById } from '../services/blog'; // <-- check name
 import { Blog } from '../types/blog';
 import { CommentFormData } from '../types/CommentForm';
 
@@ -19,8 +19,7 @@ export const useBlogData = (id: string | undefined): UseBlogDataReturn => {
 
       try {
         setLoading(true);
-        const response = await GetBlogById(id);
-
+        const response = await getBlogById(id); // <-- updated
         if (response.success) {
           setBlog(response.data);
         } else {
@@ -38,14 +37,9 @@ export const useBlogData = (id: string | undefined): UseBlogDataReturn => {
 
   const handleAddComment = async (commentData: CommentFormData): Promise<void> => {
     if (!id || !commentData.content.trim()) return;
-
     console.log('Adding comment:', commentData);
     // TODO: Implement AddComment API
   };
 
-  return {
-    blog,
-    loading,
-    handleAddComment,
-  };
+  return { blog, loading, handleAddComment };
 };
