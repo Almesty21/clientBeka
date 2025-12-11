@@ -1,6 +1,5 @@
 // src/services/apiConfig.ts
 import axios from "axios";
-import { ApiResponse } from "../types/error";
 
 const baseBackendURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 // Create axios instance with better configuration
