@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ProductPayload } from "../types";
-import { getProducts } from "../services/product";
+import { getProducts } from "../services/products";
 
 interface UseProductReturn {
   data: ProductPayload[];
