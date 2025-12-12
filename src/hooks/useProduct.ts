@@ -28,7 +28,7 @@ export default function useProduct(): UseProductReturn {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const products = await getProducts();
+      const products = await GetProducts();
       setData(products);
       setError(null);
     } catch (err: any) {
