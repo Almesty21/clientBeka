@@ -1,15 +1,13 @@
+// src/pages/Ai/Product.tsx
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card, Col, Row, Spin, Tag, Button, Tooltip } from 'antd';
-import { FiExternalLink, FiDownload, FiEye, FiLink, FiLink2 } from 'react-icons/fi';
+import { FiExternalLink, FiDownload, FiEye } from 'react-icons/fi';
 import useProduct from '../../hooks/useProduct';
 import { Link } from 'react-router-dom';
 import { ProductPayload } from '../../types';
 
-const Home: React.FC = () => {
-  const {
-    data: { loading, data: products = [] },
-    fetchData,
-  } = useProduct();
+const ProductPage: React.FC = () => {
+  const { products, loading, fetchData } = useProduct(); // Destructure properly
 
   // Format price with localization
   const formatPrice = (price: number) => {
@@ -32,7 +30,7 @@ const Home: React.FC = () => {
       event?.preventDefault();
       return false;
     }
-    return true; // Allow default behavior
+    return true;
   };
 
   // Handle download link clicks
@@ -41,7 +39,7 @@ const Home: React.FC = () => {
       event?.preventDefault();
       return false;
     }
-    return true; // Allow default behavior
+    return true;
   };
 
   if (loading) {
@@ -57,7 +55,7 @@ const Home: React.FC = () => {
       <div className="text-center py-16">
         <div className="text-gray-400 text-6xl mb-4">🤖</div>
         <p className="text-gray-500 text-lg mb-4">No AI products found</p>
-        <Button type="primary" onClick={() => fetchData()}>
+        <Button type="primary" onClick={fetchData}>
           Refresh
         </Button>
       </div>
@@ -74,7 +72,7 @@ const Home: React.FC = () => {
       </div>
 
       <Row gutter={[24, 24]}>
-        {(products as ProductPayload[]).map((product) => (
+        {products.map((product: ProductPayload) => (
           <Col key={product._id} xs={24} sm={12} md={8} lg={6}>
             <Card
               hoverable
@@ -90,40 +88,34 @@ const Home: React.FC = () => {
                 </div>
               }
               actions={[
-                <Tooltip 
-                  key="external-link" 
-                  title={product.link ? "Visit Website" : "Link not available"}
-                >
-                  <Link 
+                <Tooltip key="external-link" title={product.link ? 'Visit Website' : 'Link not available'}>
+                  <Link
                     to={product.link || '#'}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`flex items-center justify-center p-2 ${
-                      product.link 
-                        ? 'text-gray-500 hover:text-blue-600 cursor-pointer' 
-                        : 'text-gray-300 cursor-not-allowed'
+                      product.link ? 'text-gray-500 hover:text-blue-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'
                     }`}
                     onClick={(e) => !handleExternalLink(product.link, e) && e.preventDefault()}
                   >
-                    <span><FiExternalLink size={18} />Visit Site</span>
+                    <span>
+                      <FiExternalLink size={18} /> Visit Site
+                    </span>
                   </Link>
                 </Tooltip>,
-                <Tooltip 
-                  key="download" 
-                  title={product.downloadLink ? "Download" : "Download not available"}
-                >
-                  <Link 
+                <Tooltip key="download" title={product.downloadLink ? 'Download' : 'Download not available'}>
+                  <Link
                     to={product.downloadLink || '#'}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`flex items-center justify-center p-2 ${
-                      product.downloadLink 
-                        ? 'text-gray-500 hover:text-green-600 cursor-pointer' 
-                        : 'text-gray-300 cursor-not-allowed'
+                      product.downloadLink ? 'text-gray-500 hover:text-green-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'
                     }`}
                     onClick={(e) => !handleDownload(product.downloadLink, e) && e.preventDefault()}
                   >
-                     <span><FiDownload size={18} />Download</span>
+                    <span>
+                      <FiDownload size={18} /> Download
+                    </span>
                   </Link>
                 </Tooltip>,
               ]}
@@ -132,46 +124,40 @@ const Home: React.FC = () => {
             >
               <div className="flex flex-col justify-between h-full">
                 <div className="flex-grow">
-                  <h3 
+                  <h3
                     className="text-lg font-bold mb-2 line-clamp-2 text-gray-800"
                     title={product.title}
                   >
                     {product.title}
                   </h3>
-                  
-                  <p 
-                    className="text-gray-600 text-sm mb-3 line-clamp-3"
-                    title={product.description}
-                  >
+
+                  <p className="text-gray-600 text-sm mb-3 line-clamp-3" title={product.description}>
                     {product.description || 'No description available'}
                   </p>
-                  
+
                   <div className="mb-3">
                     {product.price && (
-                      <p className="text-sm text-green-600 font-semibold">
-                        {formatPrice(product.price)}
-                      </p>
+                      <p className="text-sm text-green-600 font-semibold">{formatPrice(product.price)}</p>
                     )}
                   </div>
                 </div>
-                
+
                 <div className="mt-auto">
                   {product.category && (
                     <Tag color="blue" className="mb-3">
                       {product.category}
                     </Tag>
                   )}
-                  
+
                   <div className="pt-3 border-t border-gray-100">
                     <div className="flex flex-col gap-2">
-                      {/* Internal Read More Link */}
                       <Link
                         to={`/products/${product._id}`}
                         className="text-blue-500 hover:text-blue-700 font-medium text-sm flex items-center justify-center gap-2"
                       >
                         <FiEye size={14} />
                         View Details
-                      </Link>                    
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -184,4 +170,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default ProductPage;
