@@ -1,7 +1,7 @@
 // src/hooks/useProduct.ts
 import { useState, useEffect } from "react";
 import { ProductPayload } from "../types";
-import { getProducts } from "../services/products";
+import { GetProducts  } from "../services/products";
 
 export interface UseProductReturn {
   data: ProductPayload[];
