@@ -1,7 +1,24 @@
 // src/components/BlogDetail.tsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Typography, Input, Button, Form, List, Avatar, Layout, Spin, Alert, Card, Tag, Space, Dropdown, Row, Col, message } from 'antd';
+import {
+  Typography,
+  Input,
+  Button,
+  Form,
+  List,
+  Avatar,
+  Layout,
+  Spin,
+  Alert,
+  Card,
+  Tag,
+  Space,
+  Dropdown,
+  Row,
+  Col,
+  message
+} from 'antd';
 import { useBlog, useComments, useBlogActions } from '../../hooks/useBlogs';
 import RecentBlogs from './RecentBlogs';
 import { ShareAltOutlined, SmileOutlined, MessageOutlined, EyeOutlined, UserOutlined } from '@ant-design/icons';
@@ -10,22 +27,31 @@ const { Title, Paragraph } = Typography;
 const { TextArea } = Input;
 const { Content } = Layout;
 
+// TypeScript interfaces
+interface Author {
+  id: string;
+  name?: string;
+  firstName?: string;
+  username?: string;
+  avatar?: string;
+  bio?: string;
+}
+
 interface Comment {
   id: string;
   content: string;
-  author: any;
+  author: Author;
   createdAt: string;
   likes?: number;
   replies?: Comment[];
 }
 
-// Comment payload interface
 interface CreateCommentPayload {
   content: string;
   blogId: string;
   author: string;
   parentId?: string;
-  userId?: string;
+  userId: string; // required
 }
 
 const BlogDetail = () => {
@@ -60,12 +86,12 @@ const BlogDetail = () => {
     }
   }, [isValidBlogId, navigate]);
 
-  const getAuthorName = (author: any) => author?.name || author?.firstName || author?.username || 'Unknown Author';
+  const getAuthorName = (author: Author | null | undefined) =>
+    author?.name || author?.firstName || author?.username || 'Unknown Author';
 
-  const AuthorAvatar = ({ author, size = 'default' }: { author: any; size?: 'small' | 'default' | 'large' }) => {
+  const AuthorAvatar = ({ author, size = 'default' }: { author?: Author | null; size?: 'small' | 'default' | 'large' }) => {
     const avatarSrc = author?.avatar;
     const authorName = getAuthorName(author);
-
     return (
       <Avatar
         size={size}
@@ -89,6 +115,7 @@ const BlogDetail = () => {
         content: commentContent,
         blogId: id!,
         author: commentAuthor || 'Anonymous',
+        userId: commentAuthor || 'anonymous'
       };
       await addComment(payload);
       setCommentContent('');
@@ -115,6 +142,7 @@ const BlogDetail = () => {
         blogId: id!,
         author: commentAuthor || 'Anonymous',
         parentId: commentId,
+        userId: commentAuthor || 'anonymous'
       };
       await addComment(payload);
       setReplyContents(prev => ({ ...prev, [commentId]: '' }));
@@ -176,32 +204,6 @@ const BlogDetail = () => {
     }
   };
 
-  const getBlogCategory = () => blog?.category || 'Uncategorized';
-  const getBlogTitle = () => blog?.title || 'Untitled Blog';
-  const getBlogContent = () => blog?.content || '<p>No content available</p>';
-  const getBlogImage = () => blog?.image || null;
-  const getBlogTags = () => blog?.tags || [];
-  const getBlogStats = () => ({
-    likes: blog?.likes || 0,
-    commentsCount: comments.length || 0,
-    views: blog?.views || 0,
-    readTime: blog?.readTime || 0
-  });
-
-  const getBlogReactionMenu = () => ({
-    items: reactionEmojis.map(r => ({
-      key: r.type,
-      label: <span style={{ fontSize: '1.2rem' }} onClick={() => handleReaction(r.type)}>{r.emoji}</span>
-    }))
-  });
-
-  const getCommentReactionMenu = (commentId: string) => ({
-    items: reactionEmojis.map(r => ({
-      key: r.type,
-      label: <span style={{ fontSize: '1.2rem' }} onClick={() => handleCommentReaction(commentId, r.type)}>{r.emoji}</span>
-    }))
-  });
-
   if (blogLoading) {
     return <div style={{ textAlign: 'center', padding: 100 }}><Spin size="large" /><Paragraph style={{ marginTop: 16 }}>Loading blog post...</Paragraph></div>;
   }
@@ -217,23 +219,9 @@ const BlogDetail = () => {
           style={{ marginBottom: 24 }}
           action={<Button size="small" onClick={() => navigate('/blogs')}>Back to Blogs</Button>}
         />
-        <Card>
-          <div style={{ textAlign: 'center', padding: 40 }}>
-            <Title level={3}>Blog Not Available</Title>
-            <Paragraph>The blog post you're trying to access is not available. This could be because:</Paragraph>
-            <ul style={{ textAlign: 'left', maxWidth: 400, margin: '0 auto' }}>
-              <li>The blog has been deleted</li>
-              <li>The URL is incorrect</li>
-              <li>There was a temporary error</li>
-            </ul>
-            <Button type="primary" onClick={() => navigate('/blogs')} style={{ marginTop: 16 }}>Browse All Blogs</Button>
-          </div>
-        </Card>
       </div>
     );
   }
-
-  const stats = getBlogStats();
 
   return (
     <Layout style={{ minHeight: '100vh', background: '#f5f5f5' }}>
@@ -241,15 +229,13 @@ const BlogDetail = () => {
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <Row gutter={[32, 32]}>
             <Col xs={24} lg={16}>
-              {/* Blog Content Card */}
               <Card style={{ borderRadius: 12, marginBottom: 24 }}>
-                {/* Header */}
                 <header style={{ marginBottom: 32 }}>
                   <div style={{ marginBottom: 16 }}>
-                    <Tag color="blue" style={{ fontSize: '1rem', padding: '4px 12px' }}>{getBlogCategory()}</Tag>
-                    <span style={{ marginLeft: 16, color: '#666' }}>{stats.readTime} min read • {formatDate(blog.createdAt)}</span>
+                    <Tag color="blue">{blog.category || 'Uncategorized'}</Tag>
+                    <span style={{ marginLeft: 16, color: '#666' }}>{blog.readTime || 0} min read • {formatDate(blog.createdAt)}</span>
                   </div>
-                  <Title level={1} style={{ marginBottom: 16, fontSize: '2.5rem', lineHeight: 1.2 }}>{getBlogTitle()}</Title>
+                  <Title level={1} style={{ marginBottom: 16 }}>{blog.title || 'Untitled Blog'}</Title>
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: 24 }}>
                     <AuthorAvatar author={blog.author} size="large" />
                     <div style={{ marginLeft: 12 }}>
@@ -257,32 +243,31 @@ const BlogDetail = () => {
                       {blog.author?.bio && <div style={{ color: '#666', fontSize: '0.9rem' }}>{blog.author.bio}</div>}
                     </div>
                   </div>
-                  {/* Stats */}
                   <Space size="large" style={{ flexWrap: 'wrap', marginBottom: 24 }}>
-                    <Dropdown menu={getBlogReactionMenu()} placement="topLeft" trigger={['click']} disabled={!isValidBlogId}>
-                      <Button type="text" icon={<SmileOutlined />} size="large">{stats.likes} Reactions</Button>
+                    <Dropdown menu={{ items: reactionEmojis.map(r => ({ key: r.type, label: <span onClick={() => handleReaction(r.type)}>{r.emoji}</span> })) }} placement="topLeft" trigger={['click']}>
+                      <Button type="text" icon={<SmileOutlined />} size="large">{blog.likes || 0} Reactions</Button>
                     </Dropdown>
-                    <Button type="text" icon={<MessageOutlined />} size="large">{stats.commentsCount} Comments</Button>
-                    <Button type="text" icon={<EyeOutlined />} size="large">{stats.views} Views</Button>
+                    <Button type="text" icon={<MessageOutlined />} size="large">{comments.length} Comments</Button>
+                    <Button type="text" icon={<EyeOutlined />} size="large">{blog.views || 0} Views</Button>
                     <Button type="text" icon={<ShareAltOutlined />} size="large" onClick={handleShareBlog}>Share</Button>
                   </Space>
                 </header>
 
-                {getBlogImage() && <img src={getBlogImage()!} alt={getBlogTitle()} style={{ width: '100%', height: '400px', objectFit: 'cover', borderRadius: 8 }} onError={e => e.currentTarget.style.display = 'none'} />}
+                {blog.image && <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '400px', objectFit: 'cover', borderRadius: 8 }} />}
 
-                <div className="blog-content" style={{ fontSize: '1.1rem', lineHeight: 1.7, marginBottom: 48 }} dangerouslySetInnerHTML={{ __html: getBlogContent() }} />
+                <div className="blog-content" style={{ fontSize: '1.1rem', lineHeight: 1.7, marginBottom: 48 }} dangerouslySetInnerHTML={{ __html: blog.content || '<p>No content available</p>' }} />
 
-                {getBlogTags().length > 0 && (
+                {blog.tags?.length > 0 && (
                   <div style={{ marginBottom: 32 }}>
                     <Title level={4}>Tags</Title>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                      {getBlogTags().map(tag => <Tag key={tag} color="default" style={{ fontSize: '0.9rem', padding: '4px 8px' }}>#{tag}</Tag>)}
+                      {blog.tags.map(tag => <Tag key={tag} color="default">#{tag}</Tag>)}
                     </div>
                   </div>
                 )}
               </Card>
 
-              {/* Comments Section */}
+              {/* Comments */}
               <Card title={`Comments (${comments.length})`} style={{ borderRadius: 12 }}>
                 <Form onFinish={handleAddComment} style={{ marginBottom: 32 }}>
                   <Form.Item>
@@ -296,7 +281,7 @@ const BlogDetail = () => {
 
                 {commentsLoading ? <Spin style={{ display: 'block', textAlign: 'center', padding: 40 }} /> : (
                   <List itemLayout="horizontal" dataSource={comments} locale={{ emptyText: 'No comments yet. Be the first to comment!' }}
-                    renderItem={comment => (
+                    renderItem={(comment: Comment) => (
                       <List.Item key={comment.id} style={{ padding: '16px 0', borderBottom: '1px solid #f0f0f0' }}>
                         <List.Item.Meta
                           avatar={<AuthorAvatar author={comment.author} />}
@@ -306,7 +291,7 @@ const BlogDetail = () => {
                                 <span style={{ fontWeight: 'bold', marginRight: 8 }}>{getAuthorName(comment.author)}</span>
                                 <span style={{ color: '#666', fontSize: '0.8rem' }}>{formatDate(comment.createdAt)}</span>
                               </div>
-                              <Dropdown menu={getCommentReactionMenu(comment.id)} placement="bottomRight" trigger={['click']} arrow>
+                              <Dropdown menu={{ items: reactionEmojis.map(r => ({ key: r.type, label: <span onClick={() => handleCommentReaction(comment.id, r.type)}>{r.emoji}</span> })) }} placement="bottomRight" trigger={['click']} arrow>
                                 <Button type="text" icon={<SmileOutlined />} size="small" onClick={e => e.stopPropagation()}>React</Button>
                               </Dropdown>
                             </div>
@@ -329,9 +314,9 @@ const BlogDetail = () => {
                                 </div>
                               )}
 
-                              {comment.replies && comment.replies.length > 0 && (
+                              {comment.replies?.length > 0 && (
                                 <div style={{ marginTop: 16, paddingLeft: 16, borderLeft: '2px solid #f0f0f0' }}>
-                                  {comment.replies.map(reply => (
+                                  {comment.replies.map((reply: Comment) => (
                                     <div key={reply.id} style={{ marginBottom: 12, padding: '8px 0' }}>
                                       <div style={{ display: 'flex', alignItems: 'flex-start' }}>
                                         <AuthorAvatar author={reply.author} size="small" />
