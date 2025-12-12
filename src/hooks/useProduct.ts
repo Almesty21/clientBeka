@@ -1,7 +1,6 @@
-// src/hooks/useProduct.ts
 import { useState, useEffect } from "react";
 import { ProductPayload } from "../types";
-import { GetProducts  } from "../services/products";
+import { GetProducts } from "../services/products";
 
 export interface UseProductReturn {
   data: ProductPayload[];
@@ -28,8 +27,8 @@ export default function useProduct(): UseProductReturn {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const products = await GetProducts();
-      setData(products);
+      const response = await GetProducts(); // assume returns { data: ProductPayload[] }
+      setData(response.data); // <-- extract .data
       setError(null);
     } catch (err: any) {
       setError(err.message || "Failed to fetch products");
