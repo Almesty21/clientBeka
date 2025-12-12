@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ILoginInput } from "../types/auth";
-import { loginUser } from "../services/user";  // <-- updated
+import { LoginUser } from "../services/user";  // <-- fixed
 import { useNotificationContext } from "../contexts/NotificationContext";
 import { useNavigate } from "react-router-dom";
 import { RouteName } from "../constants/route";
@@ -16,7 +16,7 @@ export default function useLogin() {
     setLoading(true);
 
     try {
-      const response = await loginUser(input);  // <-- updated
+      const response = await LoginUser(input);  // <-- fixed
 
       if (response.data?.token) {
         localStorage.setItem("token", response.data.token.access_token);
@@ -30,9 +30,9 @@ export default function useLogin() {
 
     } catch (err: any) {
       showError(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return { handleSubmit, onSubmit, control, loading };
