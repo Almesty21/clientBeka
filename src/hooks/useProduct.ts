@@ -1,24 +1,28 @@
-// src/hooks/useProduct.ts
 import { useState, useEffect } from "react";
 import { ProductPayload } from "../types";
 import { getProducts } from "../services/productService";
 
-export default function useProduct() {
+interface UseProductReturn {
+  data: ProductPayload[];
+  loading: boolean;
+  error: string | null;
+  fetchData: () => Promise<void>;
+}
+
+export default function useProduct(): UseProductReturn {
   const [data, setData] = useState<ProductPayload[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [openActivate, setOpenActivate] = useState(false);
-  const [openBan, setOpenBan] = useState(false);
-
   const fetchData = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await getProducts();
-      setData(res);
+      const products = await getProducts();
+      setData(products);
       setError(null);
     } catch (err: any) {
-      setError(err.message || "Failed to fetch");
+      setError(err.message || "Failed to fetch products");
+      setData([]);
     } finally {
       setLoading(false);
     }
@@ -33,12 +37,5 @@ export default function useProduct() {
     loading,
     error,
     fetchData,
-
-    openActivate,
-    openBan,
-    handleOpenActivate: () => setOpenActivate(true),
-    handleCloseActivate: () => setOpenActivate(false),
-    handleOpenBan: () => setOpenBan(true),
-    handleCloseBan: () => setOpenBan(false),
   };
 }
