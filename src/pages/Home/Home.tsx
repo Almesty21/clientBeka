@@ -7,10 +7,12 @@ import { ProductPayload } from '../../types';
 import { useState, useMemo } from 'react';
 
 const Home: React.FC = () => {
-  const {
-    data: { loading, data: products = [] },
-    fetchData,
-  } = useProduct();
+  // SAFELY destructure useProduct() response
+  const productState = useProduct();
+  
+  const loading = productState?.data?.loading ?? false;
+  const products: ProductPayload[] = productState?.data?.data ?? [];
+  const fetchData = productState?.fetchData;
 
   const [showAll, setShowAll] = useState(false);
 
@@ -19,7 +21,7 @@ const Home: React.FC = () => {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    return products.filter(product => {
+    return products.filter((product: ProductPayload) => {
       if (!product.createdAt) return false;
       const productDate = new Date(product.createdAt);
       return productDate >= thirtyDaysAgo;
@@ -37,8 +39,8 @@ const Home: React.FC = () => {
     return productsToShow;
   }, [showAll, products, recentProducts]);
 
-  // Check if product is new (added within last 7 days)
-  const isNewProduct = (createdAt: string | undefined) => {
+  // Check if product is new
+  const isNewProduct = (createdAt: string | undefined): boolean => {
     if (!createdAt) return false;
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -83,12 +85,12 @@ const Home: React.FC = () => {
     );
   }
 
-  if (!loading && (!products || products.length === 0)) {
+  if (!loading && products.length === 0) {
     return (
       <div className="text-center py-16">
         <div className="text-gray-400 text-6xl mb-4">🤖</div>
         <p className="text-gray-500 text-lg mb-4">No AI products found</p>
-        <Button type="primary" onClick={() => fetchData()}>
+        <Button type="primary" onClick={() => fetchData?.()}>
           Refresh
         </Button>
       </div>
@@ -117,7 +119,7 @@ const Home: React.FC = () => {
           {recentProducts.length > 0 && (
             <Button
               type={showAll ? 'default' : 'primary'}
-              onClick={() => setShowAll(!showAll)}
+              onClick={() => setShowAll(prev => !prev)}
               icon={<FiClock />}
             >
               {showAll ? 'Show Featured' : 'Show All Products'}
@@ -147,7 +149,7 @@ const Home: React.FC = () => {
       )}
 
       <Row gutter={[24, 24]}>
-        {(displayProducts as ProductPayload[]).map(product => (
+        {displayProducts.map((product: ProductPayload) => (
           <Col key={product._id} xs={24} sm={12} md={8} lg={6}>
             <Badge.Ribbon
               text="NEW"
@@ -169,6 +171,7 @@ const Home: React.FC = () => {
                       onError={handleImageError}
                       loading="lazy"
                     />
+
                     {product.createdAt && (
                       <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
                         {new Date(product.createdAt).toLocaleDateString('en-US')}
@@ -177,7 +180,11 @@ const Home: React.FC = () => {
                   </div>
                 }
                 className="h-full flex flex-col shadow-sm hover:shadow-md transition-shadow relative"
-                bodyStyle={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+                bodyStyle={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
               >
                 <div className="flex flex-col justify-between h-full">
                   <div className="flex-grow">
@@ -233,7 +240,11 @@ const Home: React.FC = () => {
                             </Button>
                           </Tooltip>
 
-                          <Tooltip title={product.downloadLink ? 'Download' : 'Download not available'}>
+                          <Tooltip
+                            title={
+                              product.downloadLink ? 'Download' : 'Download not available'
+                            }
+                          >
                             <Button
                               type="link"
                               icon={<FiDownload size={12} />}
@@ -260,12 +271,13 @@ const Home: React.FC = () => {
         <div className="text-center mt-8">
           <Button
             type="primary"
-            onClick={() => setShowAll(!showAll)}
+            onClick={() => setShowAll(prev => !prev)}
             icon={<FiClock />}
             size="large"
           >
             {showAll
-              ? `Show Featured Products (${recentProducts.length > 0 ? recentProducts.length : 4} products)`
+              ? `Show Featured Products (${recentProducts.length > 0 ? recentProducts.length : 4
+                } products)`
               : `Show All Products (${products.length} total)`}
           </Button>
         </div>
