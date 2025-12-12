@@ -1,5 +1,7 @@
+// src/pages/Auth/Register/index.tsx
 import { Button, Input } from "antd";
 import { Link } from "react-router-dom";
+import { Controller } from "react-hook-form";
 import { RouteName } from "../../../constants/route";
 import useRegister from "../../../hooks/useRegister";
 import EmailInput from "../../../components/Form/EmailInput";
@@ -7,6 +9,7 @@ import PasswordInput from "../../../components/Form/PasswordInput";
 
 export default function Register() {
   const { control, handleSubmit, loading, onSubmit } = useRegister();
+
   return (
     <div className="w-full flex h-screen justify-center items-center px-4 py-4 bg-login bg-center bg-cover bg-no-repeat">
       <div className="w-full sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4">
@@ -25,28 +28,34 @@ export default function Register() {
                   Welcome back, please Register to your account.
                 </p>
               </div>
-              <form
-                // onSubmit={(e) => {
-                //   console.log("sldjfksdj");
-                // }}
-                onSubmit={handleSubmit(onSubmit)}
-                className="w-full flex flex-col gap-y-4 mt-5"
-              >
-                <Input
-                    control={control}
-                    name="username"
-                    placeholder="UserName"
-                />
-                <EmailInput
+              <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-y-4 mt-5">
+                {/* Username */}
+                <Controller
+                  name="username"
                   control={control}
+                  render={({ field }) => (
+                    <Input {...field} placeholder="Username" />
+                  )}
+                />
+
+                {/* Email */}
+                <Controller
                   name="email"
-                  placeholder="Email"
-                />
-                <PasswordInput
                   control={control}
-                  name="password"
-                  placeholder="Password"
+                  render={({ field }) => (
+                    <EmailInput {...field} placeholder="Email" />
+                  )}
                 />
+
+                {/* Password */}
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({ field }) => (
+                    <PasswordInput {...field} placeholder="Password" />
+                  )}
+                />
+
                 <div className="w-full">
                   <Button
                     loading={loading}
@@ -57,16 +66,15 @@ export default function Register() {
                     Register
                   </Button>
                   <p className="footer-text float-right pt-6">
-                  Already have an account? 
-                  <Link to={RouteName.LOGIN}>
+                    Already have an account? 
+                    <Link to={RouteName.LOGIN}>
                       <Button type="link" className="top-2.5 w-fit float-right text-teal-400">
                         Login
                       </Button>
-                  </Link>
+                    </Link>
                   </p>
                 </div>
               </form>
-
             </div>
           </div>
         </div>
