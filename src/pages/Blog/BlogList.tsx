@@ -5,12 +5,10 @@ import { Layout, Typography, Button, Card, Tag, Space, Spin, Alert, Row, Col, Gr
 import { useBlogs, useBlogActions } from '../../hooks/useBlogs';
 import { LikeOutlined, MessageOutlined, ShareAltOutlined, SmileOutlined, UserOutlined } from '@ant-design/icons';
 import { Blog, Author } from 'types/blog';
+
 const { Title, Paragraph } = Typography;
 const { Content, Sider } = Layout;
 const { useBreakpoint } = Grid;
-
-
-
 
 const BlogList = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -64,14 +62,11 @@ const BlogList = () => {
     });
   };
 
-  const getAuthorName = (author: Author | null) => {
-    return author?.name || 'Unknown Author';
-  };
+  const getAuthorName = (author: Author | null) => author?.name || 'Unknown Author';
 
   const AuthorAvatar = ({ author, size = "small" }: { author: Author | null; size?: "small" | "large" }) => {
     const avatarSrc = author?.avatar;
     const authorName = getAuthorName(author);
-    
     return (
       <Avatar 
         size={size} 
@@ -105,14 +100,6 @@ const BlogList = () => {
           transition: 'all 0.3s ease',
           cursor: 'pointer'
         }}
-        styles={{
-          body: { 
-            padding: 0,
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column'
-          }
-        }}
         hoverable
         onClick={() => handleCardClick(blog.id)}
       >
@@ -130,12 +117,8 @@ const BlogList = () => {
                 borderTopRightRadius: 12,
                 transition: 'transform 0.3s ease'
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
             />
           </div>
         )}
@@ -215,12 +198,19 @@ const BlogList = () => {
               <div style={{ marginTop: 12 }}>
                 <Space wrap size={[4, 4]}>
                   {blog.tags.slice(0, 2).map((tag, tagIndex) => (
-                   <Tag key={`tag-${blog.id}-${tag}-${tagIndex}`} color="default" style={{ fontSize: '0.75rem', padding: '0 4px' }}>
+                   <Tag 
+                     key={`tag-${blog.id}-${tag}-${tagIndex}`} 
+                     color="default" 
+                     style={{ fontSize: '0.75rem', padding: '0 4px' }}
+                   >
                       #{tag}
                    </Tag>
                   ))}
                   {blog.tags.length > 2 && (
-                    <Tag key={`more-tags-${blog.id}`} size="small">
+                    <Tag
+                      key={`more-tags-${blog.id}`}
+                      style={{ fontSize: '0.75rem', padding: '0 4px' }}
+                    >
                       +{blog.tags.length - 2}
                     </Tag>
                   )}
@@ -231,33 +221,18 @@ const BlogList = () => {
 
           {/* Actions */}
           <div style={{ marginTop: 16, textAlign: 'center' }}>
-            <Link 
-              to={`/blog/${blog.id}`} 
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Button type="primary" size="middle" block>
-                Read More
-              </Button>
+            <Link to={`/blog/${blog.id}`} onClick={(e) => e.stopPropagation()}>
+              <Button type="primary" size="middle" block>Read More</Button>
             </Link>
             <Space style={{ marginTop: 8, width: '100%', justifyContent: 'space-between' }}>
-              <Dropdown 
-                menu={getReactionMenu(blog.id)} 
-                placement="topLeft"
-                trigger={['click']}
-              >
-                <Button 
-                  type="text" 
-                  icon={<SmileOutlined />}
-                  size="middle"
-                  onClick={(e) => e.stopPropagation()}
-                >
+              <Dropdown menu={getReactionMenu(blog.id)} placement="topLeft" trigger={['click']}>
+                <Button type="text" icon={<SmileOutlined />} size="middle" onClick={(e) => e.stopPropagation()}>
                   React
                 </Button>
               </Dropdown>
-              
               <Button 
                 type="text" 
-                icon={<ShareAltOutlined />}
+                icon={<ShareAltOutlined />} 
                 size="middle"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -274,23 +249,11 @@ const BlogList = () => {
   );
 
   if (loading) {
-    return (
-      <div style={{ textAlign: 'center', padding: 100 }}>
-        <Spin size="large" />
-      </div>
-    );
+    return <div style={{ textAlign: 'center', padding: 100 }}><Spin size="large" /></div>;
   }
 
   if (error) {
-    return (
-      <Alert
-        message="Error"
-        description={error}
-        type="error"
-        showIcon
-        style={{ margin: 24 }}
-      />
-    );
+    return <Alert message="Error" description={error} type="error" showIcon style={{ margin: 24 }} />;
   }
 
   return (
@@ -298,89 +261,43 @@ const BlogList = () => {
       <Content style={{ padding: 24 }}>
         <div style={{ maxWidth: 1400, margin: '0 auto' }}>
           <div style={{ display: 'flex', gap: 24 }}>
-            {/* Main Content */}
             <div style={{ flex: 1 }}>
-              <Title level={1} style={{ marginBottom: 32, textAlign: 'center' }}>
-                Latest Blog Posts
-              </Title>
+              <Title level={1} style={{ marginBottom: 32, textAlign: 'center' }}>Latest Blog Posts</Title>
 
               {(!blogs || blogs.length === 0) ? (
                 <Card style={{ textAlign: 'center', padding: 40 }}>
-                  <Title level={3} style={{ color: '#666' }}>
-                    No blog posts found
-                  </Title>
+                  <Title level={3} style={{ color: '#666' }}>No blog posts found</Title>
                   <Paragraph style={{ color: '#999' }}>
-                    {selectedCategory 
-                      ? `No posts found in category "${selectedCategory}"`
-                      : 'No blog posts available yet'
-                    }
+                    {selectedCategory ? `No posts found in category "${selectedCategory}"` : 'No blog posts available yet'}
                   </Paragraph>
-                  <Button 
-                    type="primary" 
-                    onClick={() => setSelectedCategory(null)}
-                    style={{ marginTop: 16 }}
-                  >
+                  <Button type="primary" onClick={() => setSelectedCategory(null)} style={{ marginTop: 16 }}>
                     View All Posts
                   </Button>
                 </Card>
               ) : (
-                <Row 
-                  key={`blog-row-${blogs.length}-${selectedCategory || 'all'}`}
-                  gutter={[24, 24]}
-                >
+                <Row key={`blog-row-${blogs.length}-${selectedCategory || 'all'}`} gutter={[24, 24]}>
                   {blogs.map((blog, index) => renderBlogCard(blog, index))}
                 </Row>
               )}
             </div>
 
-            {/* Sidebar - Categories */}
             <Sider width={300} style={{ background: 'transparent' }}>
-              <Card 
-                title="Categories" 
-                style={{ position: 'sticky', top: 24 }}
-                styles={{
-                  body: { padding: 16 }
-                }}
-              >
+              <Card title="Categories" style={{ position: 'sticky', top: 24 }}>
                 <Space direction="vertical" style={{ width: '100%' }}>
-                  <Button
-                    type={selectedCategory === null ? 'primary' : 'text'}
-                    onClick={() => setSelectedCategory(null)}
-                    block
-                    style={{ textAlign: 'left' }}
-                  >
-                    All Categories
-                  </Button>
-                  
+                  <Button type={selectedCategory === null ? 'primary' : 'text'} onClick={() => setSelectedCategory(null)} block style={{ textAlign: 'left' }}>All Categories</Button>
                   {categories.map((category, index) => (
-                    <Button
-                      key={`category-${category}-${index}`}
-                      type={selectedCategory === category ? 'primary' : 'text'}
-                      onClick={() => setSelectedCategory(category)}
-                      block
-                      style={{ textAlign: 'left' }}
-                    >
+                    <Button key={`category-${category}-${index}`} type={selectedCategory === category ? 'primary' : 'text'} onClick={() => setSelectedCategory(category)} block style={{ textAlign: 'left' }}>
                       {category}
                     </Button>
                   ))}
                 </Space>
 
-                {/* Blog Stats */}
                 <div style={{ marginTop: 32, padding: 16, background: '#f0f0f0', borderRadius: 8 }}>
                   <Title level={5}>Blog Stats</Title>
                   <Space direction="vertical" style={{ width: '100%' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span>Total Posts:</span>
-                      <strong>{blogs?.length || 0}</strong>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span>Categories:</span>
-                      <strong>{categories.length}</strong>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span>Active Category:</span>
-                      <strong>{selectedCategory || 'All'}</strong>
-                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Total Posts:</span><strong>{blogs?.length || 0}</strong></div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Categories:</span><strong>{categories.length}</strong></div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Active Category:</span><strong>{selectedCategory || 'All'}</strong></div>
                   </Space>
                 </div>
               </Card>
