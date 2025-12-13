@@ -7,7 +7,7 @@ import { ProductPayload } from '../../types';
 import { useState, useMemo } from 'react';
 
 const Products: React.FC = () => {
-  // ✅ CORRECT DESTRUCTURING
+  // ✅ FIXED: correct hook destructuring
   const {
     data: products = [],
     loading,
@@ -23,7 +23,13 @@ const Products: React.FC = () => {
 
     return products.filter((product) => {
       if (!product.createdAt) return false;
-      return new Date(product.createdAt) >= thirtyDaysAgo;
+
+      const productDate =
+        product.createdAt instanceof Date
+          ? product.createdAt
+          : new Date(product.createdAt);
+
+      return productDate >= thirtyDaysAgo;
     });
   }, [products]);
 
@@ -39,11 +45,16 @@ const Products: React.FC = () => {
   }, [showAll, products, recentProducts]);
 
   /* -------------------- HELPERS -------------------- */
-  const isNewProduct = (createdAt?: string) => {
+  const isNewProduct = (createdAt?: string | Date) => {
     if (!createdAt) return false;
+
+    const productDate =
+      createdAt instanceof Date ? createdAt : new Date(createdAt);
+
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    return new Date(createdAt) >= sevenDaysAgo;
+
+    return productDate >= sevenDaysAgo;
   };
 
   const formatPrice = (price: number) =>
@@ -66,7 +77,7 @@ const Products: React.FC = () => {
     }
   };
 
-  /* -------------------- LOADING STATE -------------------- */
+  /* -------------------- LOADING -------------------- */
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -88,16 +99,16 @@ const Products: React.FC = () => {
     );
   }
 
-  /* -------------------- MAIN UI -------------------- */
+  /* -------------------- UI -------------------- */
   return (
     <div className="p-4 md:p-8">
       {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+      <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-800">
             {showAll ? 'All AI Products' : 'Featured AI Products'}
           </h2>
-          <p className="text-gray-500 text-sm mt-1">
+          <p className="text-gray-500 text-sm">
             {showAll
               ? `Browse all ${products.length} products`
               : `Discover ${displayProducts.length} featured products`}
@@ -115,7 +126,7 @@ const Products: React.FC = () => {
         )}
       </div>
 
-      {/* PRODUCTS GRID */}
+      {/* GRID */}
       <Row gutter={[24, 24]}>
         {displayProducts.map((product: ProductPayload) => (
           <Col key={product._id} xs={24} sm={12} md={8} lg={6}>
@@ -161,7 +172,7 @@ const Products: React.FC = () => {
                 <div className="mt-4 space-y-2">
                   <Link
                     to={`/products/${product._id}`}
-                    className="flex justify-center items-center gap-2 text-blue-600"
+                    className="flex justify-center gap-2 text-blue-600"
                   >
                     <FiEye /> View Details
                   </Link>
