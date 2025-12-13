@@ -5,12 +5,7 @@ import { RouteName } from "../../../constants/route";
 import useRegister from "../../../hooks/useRegister";
 import EmailInput from "../../../components/Form/EmailInput";
 import PasswordInput from "../../../components/Form/PasswordInput";
-
-interface RegisterFormData {
-  username: string;
-  email: string;
-  password: string;
-}
+import { RegisterFormData } from "../../../types/auth";
 
 export default function Register() {
   const { loading, onSubmit } = useRegister();
@@ -24,76 +19,38 @@ export default function Register() {
   });
 
   return (
-    <div className="w-full flex h-screen justify-center items-center px-4 py-4 bg-login bg-center bg-cover bg-no-repeat">
-      <div className="w-full sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4">
-        <div
-          className="w-full bg-white rounded-lg overflow-hidden"
-          style={{ boxShadow: "0 4px 25px 0 rgba(0,0,0,.1)" }}
-        >
-          <div className="flex w-full items-center">
-            <div className="hidden lg:block lg:w-1/2">
-              <img src="" alt="logo" className="w-full h-full" />
-            </div>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full flex flex-col gap-y-4"
+    >
+      {/* Username */}
+      <Controller
+        name="username"
+        control={control}
+        render={({ field }) => (
+          <Input {...field} placeholder="Username" />
+        )}
+      />
 
-            <div className="w-full lg:w-1/2 p-8">
-              <div className="flex flex-col gap-y-2 mb-4">
-                <h4 className="font-semibold text-lg">Register</h4>
-                <p className="text-base font-normal">
-                  Welcome, please register your account.
-                </p>
-              </div>
+      {/* Email */}
+      <EmailInput<RegisterFormData>
+        name="email"
+        control={control}
+        placeholder="Email"
+      />
 
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="w-full flex flex-col gap-y-4"
-              >
-                {/* Username – plain AntD Input → use Controller */}
-                <Controller
-                  name="username"
-                  control={control}
-                  render={({ field }) => (
-                    <Input {...field} placeholder="Username" />
-                  )}
-                />
+      {/* Password */}
+      <PasswordInput<RegisterFormData>
+        name="password"
+        control={control}
+        placeholder="Password"
+      />
 
-                {/* Email – custom RHF component → NO Controller */}
-                <EmailInput
-                  name="email"
-                  control={control}
-                  placeholder="Email"
-                />
+      <Button loading={loading} htmlType="submit" type="primary">
+        Register
+      </Button>
 
-                {/* Password – custom RHF component → NO Controller */}
-                <PasswordInput
-                  name="password"
-                  control={control}
-                  placeholder="Password"
-                />
-
-                <div className="flex justify-between items-center mt-4">
-                  <Button
-                    loading={loading}
-                    htmlType="submit"
-                    type="primary"
-                    className="py-2 px-8 h-auto font-medium"
-                  >
-                    Register
-                  </Button>
-
-                  <div className="flex items-center gap-1">
-                    <span>Already have an account?</span>
-                    <Link to={RouteName.LOGIN}>
-                      <Button type="link" className="text-teal-400 p-0">
-                        Login
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <Link to={RouteName.LOGIN}>Login</Link>
+    </form>
   );
 }
