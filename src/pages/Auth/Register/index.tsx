@@ -1,14 +1,28 @@
-// src/pages/Auth/Register/index.tsx
 import { Button, Input } from "antd";
 import { Link } from "react-router-dom";
-import { Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { RouteName } from "../../../constants/route";
 import useRegister from "../../../hooks/useRegister";
 import EmailInput from "../../../components/Form/EmailInput";
 import PasswordInput from "../../../components/Form/PasswordInput";
 
+interface RegisterFormData {
+  username: string;
+  email: string;
+  password: string;
+}
+
 export default function Register() {
-  const { control, handleSubmit, loading, onSubmit } = useRegister();
+  const { loading, onSubmit } = useRegister();
+
+  // Use useForm directly
+  const { control, handleSubmit } = useForm<RegisterFormData>({
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+    },
+  });
 
   return (
     <div className="w-full flex h-screen justify-center items-center px-4 py-4 bg-login bg-center bg-cover bg-no-repeat">
