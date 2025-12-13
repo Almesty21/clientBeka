@@ -1,4 +1,6 @@
-declare module '@tailwindcss/vite' {
-  import { Plugin } from 'vite';
-  export default function tailwindcss(): Plugin;
-}
+import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+  plugins: [tailwindcss()],
+});
