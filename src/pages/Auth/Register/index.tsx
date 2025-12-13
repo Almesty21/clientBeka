@@ -10,7 +10,7 @@ import { UserPayload  } from "../../../types/auth";
 export default function Register() {
   const { loading, onSubmit } = useRegister();
 
-  const { control, handleSubmit } = useForm<RegisterFormData>({
+  const { control, handleSubmit } = useForm<UserPayload>({
     defaultValues: {
       username: "",
       email: "",
