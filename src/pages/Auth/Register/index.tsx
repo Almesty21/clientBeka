@@ -5,7 +5,7 @@ import { RouteName } from "../../../constants/route";
 import useRegister from "../../../hooks/useRegister";
 import EmailInput from "../../../components/Form/EmailInput";
 import PasswordInput from "../../../components/Form/PasswordInput";
-import { RegisterFormData } from "../../../types/auth";
+import { UserPayload  } from "../../../types/auth";
 
 export default function Register() {
   const { loading, onSubmit } = useRegister();
@@ -33,14 +33,14 @@ export default function Register() {
       />
 
       {/* Email */}
-      <EmailInput<RegisterFormData>
+      <EmailInput<UserPayload>
         name="email"
         control={control}
         placeholder="Email"
       />
 
       {/* Password */}
-      <PasswordInput<RegisterFormData>
+      <PasswordInput<UserPayload >
         name="password"
         control={control}
         placeholder="Password"
