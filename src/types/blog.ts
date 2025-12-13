@@ -1,4 +1,5 @@
 // src/models/blog.ts
+// src/types/blog.ts
 export interface Author {
   id: string;
   name: string;
@@ -6,7 +7,12 @@ export interface Author {
   avatar?: string;
   bio?: string;
   createdAt?: string;
+  // optional extra fields
+  firstName?: string;
+  username?: string;
 }
+
+
 export interface Comment {
   id: string;
   blogId: string;
@@ -17,6 +23,8 @@ export interface Comment {
   likes: number;
   createdAt: string;
   updatedAt?: string;
+  author?: Author | null;
+  replies?: Comment[];
 }
 
 export interface CreateCommentPayload {
@@ -30,7 +38,6 @@ export interface LikeCommentResponse {
   id: string;
   likes: number;
 }
-
 
 export interface Blog {
   id: string;
