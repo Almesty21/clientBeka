@@ -1,32 +1,23 @@
 import { Input } from "antd";
-import { Control, Controller } from "react-hook-form";
-import { UserOutlined } from "@ant-design/icons";
+import { Control, Controller, FieldValues, Path } from "react-hook-form";
 
-interface IProps {
-  name: string;
-  placeholder: string;
-  control: Control<any, any>;
+interface EmailInputProps<T extends FieldValues> {
+  name: Path<T>;
+  control: Control<T>;
+  placeholder?: string;
 }
 
-export default function EmailInput({ name, placeholder, control }: IProps) {
+export default function EmailInput<T extends FieldValues>({
+  name,
+  control,
+  placeholder,
+}: EmailInputProps<T>) {
   return (
     <Controller
-      control={control}
       name={name}
-      defaultValue={""}
-      render={({ field, fieldState: { error } }) => (
-        <div className="w-full">
-          <Input
-            type="email"
-            {...field}
-            status={error ? "error" : undefined}
-            size="large"
-            className="outline-none"
-            placeholder={placeholder}
-            prefix={<UserOutlined />}
-          />
-          <span className="text-xs text-red-500">{error?.message}</span>
-        </div>
+      control={control}
+      render={({ field }) => (
+        <Input {...field} type="email" placeholder={placeholder} />
       )}
     />
   );
