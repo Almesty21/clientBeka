@@ -15,7 +15,6 @@ interface RegisterFormData {
 export default function Register() {
   const { loading, onSubmit } = useRegister();
 
-  // Use useForm directly
   const { control, handleSubmit } = useForm<RegisterFormData>({
     defaultValues: {
       username: "",
@@ -48,7 +47,7 @@ export default function Register() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="w-full flex flex-col gap-y-4"
               >
-                {/* Username */}
+                {/* Username – plain AntD Input → use Controller */}
                 <Controller
                   name="username"
                   control={control}
@@ -57,22 +56,18 @@ export default function Register() {
                   )}
                 />
 
-                {/* Email */}
-                <Controller
+                {/* Email – custom RHF component → NO Controller */}
+                <EmailInput
                   name="email"
                   control={control}
-                  render={({ field }) => (
-                    <EmailInput {...field} placeholder="Email" />
-                  )}
+                  placeholder="Email"
                 />
 
-                {/* Password */}
-                <Controller
+                {/* Password – custom RHF component → NO Controller */}
+                <PasswordInput
                   name="password"
                   control={control}
-                  render={({ field }) => (
-                    <PasswordInput {...field} placeholder="Password" />
-                  )}
+                  placeholder="Password"
                 />
 
                 <div className="flex justify-between items-center mt-4">
