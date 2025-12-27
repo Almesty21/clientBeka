@@ -17,8 +17,5 @@
       "models/*": ["models/*"]
     }
   },
-  "include": [
-    "src/**/*", // Include all TypeScript files in the src directory
-    "vite.config.ts" // Include your Vite config file
-  ]
+  "include": ["src", "vite.config.ts"] 
 }
