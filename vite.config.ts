@@ -1,13 +1,11 @@
-// vite.config.ts
+// vite.config.js
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tailwindcss from "tailwindcss"; // Correct import
 
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss() // Use tailwindcss here
-  ],
+      ],
   build: {
     outDir: "build", // Output directory for the build
   },
